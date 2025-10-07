@@ -3,9 +3,7 @@ import { Pool } from 'pg';
 import * as schema from './schema';
 import dotenv from 'dotenv';
 
-if (process.env.NODE_ENV !== 'production') {
-  dotenv.config();
-}
+dotenv.config();
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
