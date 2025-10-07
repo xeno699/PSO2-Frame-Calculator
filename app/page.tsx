@@ -5,14 +5,14 @@ import { trpc } from '@/utils/trpc';
 export const dynamic = 'force-dynamic'; // ← これを追加
 
 export default function ActionsPage() {
-const { data, isLoading, error } = trpc.actions.list.useQuery();
+  const { data, isLoading, error } = trpc.actions.list.useQuery();
 
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p className="text-red-500">エラー: {error.message}</p>;
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full border border-gray-200 divide-y divide-gray-200">
+      <table className="min-w-full divide-y divide-gray-200 border border-gray-200">
         <thead className="bg-gray-100">
           <tr>
             <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">ID</th>
@@ -24,7 +24,7 @@ const { data, isLoading, error } = trpc.actions.list.useQuery();
             <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">クラスID</th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200 bg-white">
           {data?.map((a) => (
             <tr key={a.id} className="hover:bg-gray-50">
               <td className="px-4 py-2 text-sm text-gray-600">{a.id}</td>
