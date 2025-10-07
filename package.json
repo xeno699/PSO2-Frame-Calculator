@@ -17,6 +17,7 @@
     "@trpc/next": "^11.6.0",
     "@trpc/react-query": "^11.6.0",
     "@trpc/server": "^11.6.0",
+    "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.6",
     "next": "15.5.4",
     "pg": "^8.16.3",
