@@ -49,4 +49,4 @@ jobs:
 
       - name: Deploy to Vercel
         run: |
-           vercel --yes --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel --yes --prod --token=${{ secrets.VERCEL_TOKEN }}
