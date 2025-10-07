@@ -6,7 +6,7 @@ function getClassId(insertedClasses: { id: number; name: string }[], className: 
   if (!found) {
     throw new Error(`Class "${className}" が見つかりません`);
   }
-  return found.id; // string型として返す
+  return found.id;
 }
 
 async function main() {
@@ -15,7 +15,6 @@ async function main() {
     .values([{ name: 'ハンター' }, { name: 'レンジャー' }, { name: 'フォース' }])
     .returning();
 
-  // 関数を使ってIDを取得
   const hunterId = getClassId(insertedClasses, 'ハンター');
   const rangerId = getClassId(insertedClasses, 'レンジャー');
   const forceId = getClassId(insertedClasses, 'フォース');

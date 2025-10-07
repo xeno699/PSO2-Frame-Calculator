@@ -2,7 +2,7 @@
 
 import { trpc } from '@/utils/trpc';
 
-export const dynamic = 'force-dynamic'; // ← これを追加
+export const dynamic = 'force-dynamic';
 
 export default function ActionsPage() {
   const { data, isLoading, error } = trpc.actions.list.useQuery();
