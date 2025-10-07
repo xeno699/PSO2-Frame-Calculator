@@ -1,5 +1,8 @@
-"use client";
-import { trpc } from "@/utils/trpc";
+'use client';
+
+import { trpc } from '@/utils/trpc';
+
+export const dynamic = 'force-dynamic'; // ← これを追加
 
 export default function ActionsPage() {
   const { data, isLoading } = trpc.actions.list.useQuery();
@@ -8,8 +11,8 @@ export default function ActionsPage() {
 
   return (
     <ul>
-      {data?.map(a => (
-        <li key={a.id}>{a.name} - Power: {a.power}</li>
+      {data?.map((a) => (
+        <li key={a.id}>{a.name}</li>
       ))}
     </ul>
   );

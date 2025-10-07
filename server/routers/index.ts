@@ -1,5 +1,5 @@
-import { router } from "../trpc";
-import { actionsRouter } from "./actions";
+import { router } from '../trpc';
+import { actionsRouter } from './actions';
 
 export const appRouter = router({
   actions: actionsRouter,

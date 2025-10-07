@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { publicProcedure, router } from "../trpc";
-import { db } from "@/db";
-import { actions } from "@/db/schema";
+import { z } from 'zod';
+import { publicProcedure, router } from '../trpc';
+import { db } from '@/db';
+import { actions } from '@/db/schema';
 
 export const actionsRouter = router({
   list: publicProcedure.query(async () => {
