@@ -43,16 +43,10 @@ jobs:
 
       - name: Run seed script
         run: npm run seed
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Install Vercel CLI
         run: npm install -g vercel
 
       - name: Deploy to Vercel
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          vercel --prod --confirm --token $VERCEL_TOKEN --org $VERCEL_ORG_ID --project $VERCEL_PROJECT_ID
+           vercel --yes --prod --token=${{ secrets.VERCEL_TOKEN }}
