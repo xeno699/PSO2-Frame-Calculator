@@ -9,7 +9,14 @@ function getClassId(insertedClasses: { id: number; name: string }[], className: 
   return found.id;
 }
 
-async function main() {
+async function resetDatabase() {
+  await db.transaction(async (tx) => {
+    await tx.delete(actions).execute();
+    await tx.delete(classes).execute();
+  });
+}
+
+async function seedDatabase() {
   const insertedClasses = await db
     .insert(classes)
     .values([{ name: 'ハンター' }, { name: 'レンジャー' }, { name: 'フォース' }])
@@ -40,6 +47,10 @@ async function main() {
       classId: hunterId,
     },
   ]);
+}
+async function main() {
+  await resetDatabase();
+  await seedDatabase();
 }
 
 main().then(() => console.log('完了'));
