@@ -35,7 +35,7 @@ jobs:
         run: npm run lint
 
       - name: Run Prettier check
-        run: npm run prettier:check
+        run: npm run format:check
 
       - name: TypeScript check
         run: npm run type-check
@@ -44,7 +44,7 @@ jobs:
         run: npm run build
 
       - name: Run seed script
-        run: npx ts-node db/seed.ts
+        run: npm run seed
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
