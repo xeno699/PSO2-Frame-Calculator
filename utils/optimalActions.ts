@@ -21,12 +21,9 @@ interface OptimalResult {
  * @param actions - The list of actions to choose from.
  * @returns The top combinations of actions ranked by total power.
  */
-export const calculateOptimalActions = (
-  frameLimit: number,
-  actions: Action[]
-): OptimalResult => {
+export const calculateOptimalActions = (frameLimit: number, actions: Action[]): OptimalResult => {
   // Sort actions by power-to-frame ratio in descending order
-  const sortedActions = actions.sort((a, b) => (b.power / b.frames) - (a.power / a.frames));
+  const sortedActions = actions.sort((a, b) => b.power / b.frames - a.power / a.frames);
 
   const combinations: Combination[] = [];
 
@@ -59,9 +56,7 @@ export const calculateOptimalActions = (
   findCombinations([], frameLimit, 0, 0);
 
   // Sort combinations by total power in descending order and return top 5
-  const topCombinations = combinations
-    .sort((a, b) => b.totalPower - a.totalPower)
-    .slice(0, 5);
+  const topCombinations = combinations.sort((a, b) => b.totalPower - a.totalPower).slice(0, 5);
 
   return { combinations: topCombinations };
 };

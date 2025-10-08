@@ -7,6 +7,19 @@ import FrameInput from './components/FrameInput';
 
 export const dynamic = 'force-dynamic';
 
+interface Action {
+  name: string;
+  frames: number;
+  power: number;
+}
+
+interface Combination {
+  actions: Action[];
+  totalPower: number;
+  totalFrames: number;
+  remainingFrames: number;
+}
+
 export default function ActionsPage() {
   const { data, isLoading, error } = trpc.actions.list.useQuery();
   const [frameLimit, setFrameLimit] = useState(100); // Default frame limit
@@ -15,12 +28,11 @@ export default function ActionsPage() {
   if (error) return <p className="text-red-500">エラー: {error.message}</p>;
 
   // Transform data from trpc.actions.list to match the algorithm requirements
-  const items =
-    data?.map((a) => ({
-      name: a.name,
-      frames: a.frames,
-      power: a.power,
-    })) || [];
+  const items: Action[] = data?.map((a) => ({
+    name: a.name,
+    frames: a.frames,
+    power: a.power,
+  })) || [];
 
   const result = calculateOptimalActions(frameLimit, items);
 
@@ -39,11 +51,11 @@ export default function ActionsPage() {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 bg-white">
-          {result.combinations.map((combo: any, index: number) => (
+          {result.combinations.map((combo: Combination, index: number) => (
             <tr key={index} className="hover:bg-gray-50">
               <td className="px-4 py-2 text-sm text-gray-600">{index + 1}</td>
               <td className="px-4 py-2 text-sm text-gray-800">
-                {combo.actions.map((a: any) => a.name).join(', ')}
+                {combo.actions.map((a: Action) => a.name).join(', ')}
               </td>
               <td className="px-4 py-2 text-sm text-gray-800">{combo.totalPower}</td>
               <td className="px-4 py-2 text-sm text-gray-800">{combo.totalFrames}</td>
