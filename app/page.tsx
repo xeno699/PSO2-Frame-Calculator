@@ -28,11 +28,12 @@ export default function ActionsPage() {
   if (error) return <p className="text-red-500">エラー: {error.message}</p>;
 
   // Transform data from trpc.actions.list to match the algorithm requirements
-  const items: Action[] = data?.map((a) => ({
-    name: a.name,
-    frames: a.frames,
-    power: a.power,
-  })) || [];
+  const items: Action[] =
+    data?.map((a) => ({
+      name: a.name,
+      frames: a.frames,
+      power: a.power,
+    })) || [];
 
   const result = calculateOptimalActions(frameLimit, items);
 
@@ -46,8 +47,12 @@ export default function ActionsPage() {
             <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">順位</th>
             <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">組み合わせ</th>
             <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">威力</th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">動作フレーム数</th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">猶予フレーム数</th>
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
+              動作フレーム数
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
+              猶予フレーム数
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 bg-white">
