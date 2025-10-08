@@ -12,6 +12,7 @@ interface ActionItem {
   name: string;
   frames: number;
   power: number;
+  maxUsage: number;
   classId?: number; // classId はオプションにしておく
 }
 
@@ -40,7 +41,7 @@ export default function ActionsPage() {
     name: a.name,
     frames: a.frames,
     power: a.power,
-    // classId は calculateOptimalActions では不要なので optional
+    maxUsage: a.maxUsage,
   }));
 
   const result = calculateOptimalActions(frameLimit, items);

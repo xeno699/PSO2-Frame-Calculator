@@ -2,6 +2,7 @@ interface Action {
   name: string;
   frames: number;
   power: number;
+  maxUsage: number; // 追加
 }
 
 interface Combination {
@@ -22,7 +23,7 @@ interface OptimalResult {
  * @returns The top combinations of actions ranked by total power.
  */
 export const calculateOptimalActions = (frameLimit: number, actions: Action[]): OptimalResult => {
-  // Sort actions by power-to-frame ratio in descending order
+  // power/frame の効率でソート
   const sortedActions = actions.sort((a, b) => b.power / b.frames - a.power / a.frames);
 
   const combinations: Combination[] = [];
@@ -31,6 +32,7 @@ export const calculateOptimalActions = (frameLimit: number, actions: Action[]): 
     currentActions: Action[],
     remainingFrames: number,
     currentPower: number,
+    usageCount: Map<string, number>, // 使用回数トラッキング
     startIndex: number
   ) => {
     combinations.push({
@@ -42,20 +44,30 @@ export const calculateOptimalActions = (frameLimit: number, actions: Action[]): 
 
     for (let i = startIndex; i < sortedActions.length; i++) {
       const action = sortedActions[i];
-      if (action.frames <= remainingFrames) {
+      const used = usageCount.get(action.name) ?? 0;
+
+      if (
+        action.frames <= remainingFrames &&
+        used < action.maxUsage // 使用回数制限チェック
+      ) {
+        usageCount.set(action.name, used + 1);
+
+        // i をそのまま渡すことで「同じアクションを複数回選択」できる
         findCombinations(
           [...currentActions, action],
           remainingFrames - action.frames,
           currentPower + action.power,
-          i + 1
+          usageCount,
+          i
         );
+
+        usageCount.set(action.name, used); // backtrack
       }
     }
   };
 
-  findCombinations([], frameLimit, 0, 0);
+  findCombinations([], frameLimit, 0, new Map(), 0);
 
-  // Sort combinations by total power in descending order and return top 5
   const topCombinations = combinations.sort((a, b) => b.totalPower - a.totalPower).slice(0, 5);
 
   return { combinations: topCombinations };
