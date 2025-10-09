@@ -1,15 +1,8 @@
 import { db } from '.';
 import { classes, actions } from './schema';
+import { actionData } from './actionData';
 // import axios from 'axios';
 // import * as cheerio from 'cheerio';
-
-interface ActionScrape {
-  name: string;
-  power: number;
-  frames: number;
-  maxUsage: number;
-  className: string;
-}
 
 async function restoreDatabase() {
   await db.transaction(async (tx) => {
@@ -72,85 +65,6 @@ async function seedDatabase() {
     return acc;
   }, {});
 
-  const actionData: ActionScrape[] = [
-    {
-      name: 'ジュリーエンダンス（前半）',
-      power: 202.8,
-      frames: 45,
-      maxUsage: 100,
-      className: 'ファイター',
-    },
-    {
-      name: 'ジュリーエンダンス（後半）',
-      power: 274.5,
-      frames: 124,
-      maxUsage: 100,
-      className: 'ファイター',
-    },
-    {
-      name: 'アンチェインサークル（前半）',
-      power: 577.2,
-      frames: 64,
-      maxUsage: 100,
-      className: 'ファイター',
-    },
-    {
-      name: 'アンチェインサークル（後半）',
-      power: 202.8,
-      frames: 35,
-      maxUsage: 100,
-      className: 'ファイター',
-    },
-    {
-      name: 'クイックガッシュ（前半）',
-      power: 441,
-      frames: 92,
-      maxUsage: 100,
-      className: 'ファイター',
-    },
-    {
-      name: 'クイックガッシュ（後半）',
-      power: 259,
-      frames: 53,
-      maxUsage: 100,
-      className: 'ファイター',
-    },
-    {
-      name: 'スカイクライム（前半）',
-      power: 207.5,
-      frames: 43,
-      maxUsage: 100,
-      className: 'ファイター',
-    },
-    {
-      name: 'スカイクライム（後半）',
-      power: 227.5,
-      frames: 47,
-      maxUsage: 100,
-      className: 'ファイター',
-    },
-    {
-      name: 'フォトンブラスト（ダブルセイバー）',
-      power: 3900,
-      frames: 293,
-      maxUsage: 1,
-      className: 'ファイター',
-    },
-    {
-      name: 'スパイラルドライブ（通常1派生）',
-      power: 790,
-      frames: 87,
-      maxUsage: 2,
-      className: 'ファイター',
-    },
-    {
-      name: 'デッドリーアーチャー',
-      power: 1596,
-      frames: 180,
-      maxUsage: 1,
-      className: 'ファイター',
-    },
-  ];
   const actionsToInsert = actionData.map(({ name, power, frames, maxUsage, className }) => ({
     name,
     power,
