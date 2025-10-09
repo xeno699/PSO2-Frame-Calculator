@@ -1,10 +1,10 @@
 import { router } from '../trpc';
 import { actionsRouter } from './actions';
-import { classesRouter } from './classes';
+import { weponsRouter } from './wepons';
 
 export const appRouter = router({
   actions: actionsRouter,
-  classes: classesRouter,
+  weapons: weponsRouter,
 });
 
 export type AppRouter = typeof appRouter;

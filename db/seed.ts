@@ -1,5 +1,5 @@
 import { db } from '.';
-import { classes, actions } from './schema';
+import { weapons, actions } from './schema';
 import { actionData } from './actionData';
 // import axios from 'axios';
 // import * as cheerio from 'cheerio';
@@ -7,7 +7,7 @@ import { actionData } from './actionData';
 async function restoreDatabase() {
   await db.transaction(async (tx) => {
     await tx.delete(actions).execute();
-    await tx.delete(classes).execute();
+    await tx.delete(weapons).execute();
   });
 }
 
@@ -47,30 +47,27 @@ async function restoreDatabase() {
 // }
 
 async function seedDatabase() {
-  const insertedClasses = await db
-    .insert(classes)
+  const insertedWeapons = await db
+    .insert(weapons)
     .values([
-      { name: 'ハンター' },
-      { name: 'レンジャー' },
-      { name: 'フォース' },
-      { name: 'バウンサー' },
-      { name: 'ガンナー' },
-      { name: 'テクター' },
-      { name: 'ファイター' },
+      { name: 'ソード' },
+      { name: 'ワイヤードランス' },
+      { name: 'パルチザン' },
+      { name: 'ダブルセイバー' },
     ])
     .returning();
 
-  const classIds = insertedClasses.reduce<{ [key: string]: number }>((acc, { id, name }) => {
+  const weaponIds = insertedWeapons.reduce<{ [key: string]: number }>((acc, { id, name }) => {
     acc[name] = id;
     return acc;
   }, {});
 
-  const actionsToInsert = actionData.map(({ name, power, frames, maxUsage, className }) => ({
+  const actionsToInsert = actionData.map(({ name, power, frames, maxUsage, weaponName }) => ({
     name,
     power,
     frames,
     maxUsage,
-    classId: classIds[className],
+    weaponId: weaponIds[weaponName],
   }));
 
   await db.insert(actions).values(actionsToInsert);

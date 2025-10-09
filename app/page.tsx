@@ -12,7 +12,7 @@ interface ActionItem {
   frames: number;
   power: number;
   maxUsage: number;
-  classId?: number;
+  WeaponId?: number;
 }
 
 interface Combination {
@@ -24,15 +24,15 @@ interface Combination {
 
 export default function ActionsPage() {
   const { data: actionsData, isLoading, error } = trpc.actions.list.useQuery();
-  const { data: classesData } = trpc.classes.list.useQuery();
+  const { data: weaponsData } = trpc.weapons.list.useQuery();
 
   const [frameLimit, setFrameLimit] = useState(100);
-  const [selectedClassId, setSelectedClassId] = useState<number>(classesData?.[0]?.id ?? 0);
+  const [selectedWeaponId, setSelectedWeaponId] = useState<number>(weaponsData?.[0]?.id ?? 0);
 
   if (isLoading) return <p>読み込み中...</p>;
   if (error) return <p className="text-red-500">エラー: {error.message}</p>;
 
-  const filteredActions = actionsData?.filter((a) => a.classId === selectedClassId) || [];
+  const filteredActions = actionsData?.filter((a) => a.weaponId === selectedWeaponId) || [];
 
   const items: ActionItem[] = filteredActions.map((a) => ({
     name: a.name,
@@ -55,19 +55,19 @@ export default function ActionsPage() {
           </div>
 
           <div className="flex w-full flex-col sm:w-48">
-            <label htmlFor="classSelect" className="mb-1 text-sm font-medium text-gray-700">
-              クラスを選択
+            <label htmlFor="weaponTypeSelect" className="mb-1 text-sm font-medium text-gray-700">
+              武器種を選択
             </label>
             <select
-              id="classSelect"
-              value={selectedClassId ?? ''}
-              onChange={(e) => setSelectedClassId(e.target.value ? Number(e.target.value) : 0)}
+              id="weaponTypeSelect"
+              value={selectedWeaponId ?? ''}
+              onChange={(e) => setSelectedWeaponId(e.target.value ? Number(e.target.value) : 0)}
               className="rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             >
               <option value="">未選択</option>
-              {classesData?.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
+              {weaponsData?.map((w) => (
+                <option key={w.id} value={w.id}>
+                  {w.name}
                 </option>
               ))}
             </select>
@@ -75,7 +75,7 @@ export default function ActionsPage() {
         </div>
       </div>
 
-      {/* テーブル */}
+      {/* 結果テーブル */}
       <div className="overflow-x-auto rounded-xl shadow">
         <table className="min-w-full divide-y divide-gray-200 bg-white">
           <thead className="sticky top-0 bg-gray-100">

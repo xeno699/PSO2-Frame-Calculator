@@ -14,7 +14,7 @@ export const actionsRouter = router({
         power: z.number(),
         frames: z.number(),
         maxUsage: z.number().default(1),
-        classId: z.number(),
+        weaponId: z.number(),
       })
     )
     .mutation(async ({ input }) => {

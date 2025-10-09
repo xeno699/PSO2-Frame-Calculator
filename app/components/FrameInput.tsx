@@ -12,6 +12,14 @@ const FrameInput: React.FC<FrameInputProps> = ({ onSubmit }) => {
     onSubmit(frameLimit);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = Number(e.target.value);
+    // Clamp the value between 0 and 500
+    if (value < 0) value = 0;
+    if (value > 600) value = 600;
+    setFrameLimit(value);
+  };
+
   return (
     <form onSubmit={handleSubmit} className="w-full">
       <label htmlFor="frameLimit" className="block text-sm font-medium text-gray-700">
@@ -23,7 +31,9 @@ const FrameInput: React.FC<FrameInputProps> = ({ onSubmit }) => {
           type="number"
           id="frameLimit"
           value={frameLimit}
-          onChange={(e) => setFrameLimit(Number(e.target.value))}
+          onChange={handleChange}
+          min={0}
+          max={600}
           className="block w-full flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
 

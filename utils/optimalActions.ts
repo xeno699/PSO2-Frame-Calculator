@@ -23,46 +23,52 @@ interface OptimalResult {
  * @returns The top combinations of actions ranked by total power.
  */
 export const calculateOptimalActions = (frameLimit: number, actions: Action[]): OptimalResult => {
-  const K = 5;
+  // power/frame の効率でソート
+  const sortedActions = actions.sort((a, b) => b.power / b.frames - a.power / a.frames);
 
-  // dp[f] will store top K combinations for f frames used
-  const dp: Combination[][] = Array(frameLimit + 1)
-    .fill(null)
-    .map(() => []);
+  const combinations: Combination[] = [];
 
-  // initialize dp[0] with empty combination
-  dp[0].push({ actions: [], totalPower: 0, totalFrames: 0, remainingFrames: frameLimit });
+  const findCombinations = (
+    currentActions: Action[],
+    remainingFrames: number,
+    currentPower: number,
+    usageCount: Map<string, number>, // 使用回数トラッキング
+    startIndex: number
+  ) => {
+    combinations.push({
+      actions: [...currentActions],
+      totalPower: currentPower,
+      totalFrames: frameLimit - remainingFrames,
+      remainingFrames,
+    });
 
-  for (const action of actions) {
-    for (let f = frameLimit; f >= action.frames; f--) {
-      const candidates: Combination[] = [];
+    for (let i = startIndex; i < sortedActions.length; i++) {
+      const action = sortedActions[i];
+      const used = usageCount.get(action.name) ?? 0;
 
-      for (const comb of dp[f - action.frames]) {
-        const usageCount = new Map<string, number>();
-        comb.actions.forEach((a) => usageCount.set(a.name, (usageCount.get(a.name) ?? 0) + 1));
+      if (
+        action.frames <= remainingFrames &&
+        used < action.maxUsage // 使用回数制限チェック
+      ) {
+        usageCount.set(action.name, used + 1);
 
-        if ((usageCount.get(action.name) ?? 0) < action.maxUsage) {
-          // create a new combination by adding current action
-          const newComb: Combination = {
-            actions: [...comb.actions, action],
-            totalPower: comb.totalPower + action.power,
-            totalFrames: comb.totalFrames + action.frames,
-            remainingFrames: frameLimit - (comb.totalFrames + action.frames),
-          };
-          candidates.push(newComb);
-        }
+        // i をそのまま渡すことで「同じアクションを複数回選択」できる
+        findCombinations(
+          [...currentActions, action],
+          remainingFrames - action.frames,
+          currentPower + action.power,
+          usageCount,
+          i
+        );
+
+        usageCount.set(action.name, used); // backtrack
       }
-
-      // merge existing combinations with new candidates
-      const allCombs = [...dp[f], ...candidates];
-      // sort by totalPower descending and keep top K
-      dp[f] = allCombs.sort((a, b) => b.totalPower - a.totalPower).slice(0, K);
     }
-  }
+  };
 
-  // collect all top combinations across all frame counts
-  const allTop: Combination[] = dp.flat();
-  const uniqueTop = allTop.sort((a, b) => b.totalPower - a.totalPower).slice(0, K);
+  findCombinations([], frameLimit, 0, new Map(), 0);
 
-  return { combinations: uniqueTop };
+  const topCombinations = combinations.sort((a, b) => b.totalPower - a.totalPower).slice(0, 5);
+
+  return { combinations: topCombinations };
 };

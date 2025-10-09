@@ -1,6 +1,6 @@
 import { pgTable, serial, varchar, integer, doublePrecision } from 'drizzle-orm/pg-core';
 
-export const classes = pgTable('classes', {
+export const weapons = pgTable('weapons', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 100 }).notNull(),
 });
@@ -11,7 +11,7 @@ export const actions = pgTable('actions', {
   power: doublePrecision('power').notNull(),
   frames: integer('frames').notNull(),
   maxUsage: integer('max_usage').default(1).notNull(),
-  classId: integer('class_id')
+  weaponId: integer('weapon_id')
     .notNull()
-    .references(() => classes.id),
+    .references(() => weapons.id),
 });
